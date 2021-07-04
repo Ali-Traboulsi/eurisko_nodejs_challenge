@@ -1,0 +1,30 @@
+{
+  "name": "eurisko_challenge",
+  "version": "1.0.0",
+  "description": "restaurant_online_order_app",
+  "main": "index.js",
+  "repository": "https://github.com/Ali-Traboulsi/eurisko_nodejs_challenge.git",
+  "author": "Ali-Traboulsi <alitraboulsi112.gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon ./index.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-jwt": "^6.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^3.6.9",
+    "mongoose": "^5.13.2",
+    "nodemailer": "^6.6.2",
+    "rootpath": "^0.1.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.9"
+  }
+}

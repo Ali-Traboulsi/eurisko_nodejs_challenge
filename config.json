@@ -1,0 +1,4 @@
+{
+  "secret": "KasdgafFJasdhbas234fbaghlhjh232bafhabs345fasdfjnadhdf81234l",
+  "connectionString": "mongodb+srv://nodedev:1234567890Ali@cluster0.kghew.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+}
