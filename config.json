@@ -1,4 +1,14 @@
 {
-  "secret": "KasdgafFJasdhbas234fbaghlhjh232bafhabs345fasdfjnadhdf81234l",
-  "connectionString": "mongodb+srv://nodedev:1234567890Ali@cluster0.kghew.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+  "secret": "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTYyNTQ0MjE5MiwiaWF0IjoxNjI1NDQyMTkyfQ.P14HHmSEQI5lqlzsOPRRU-Su7UGwpcXtaNJbC0Z3Ywg",
+  "secretRefresh": "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTYyNTQ2OTE2OSwiaWF0IjoxNjI1NDY5MTY5fQ.UDqseCTTgSzs4tTsY7dDNcDdtUcssd0wc51nhGDw_vk",
+  "connectionString": "mongodb+srv://nodedev:1234567890Ali@cluster0.kghew.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+  "emailFrom": "info@node-mongo-signup-verification-api.com",
+  "smtpOptions": {
+    "host": "smtp.ethereal.email",
+    "port": 587,
+    "auth": {
+      "user": "brook.wilderman87@ethereal.email",
+      "pass": "aNr729veV7xP3meSdq"
+    }
+  }
 }

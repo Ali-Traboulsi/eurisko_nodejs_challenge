@@ -11,33 +11,22 @@ const crypto = require("crypto");
 const Role = require('_helpers/role');
 const sendEmail = require('_helpers/send_email');
 const db = require('_helpers/db');
-
-module.exports = {
-    authenticate,
-    refreshToken,
-    revokeToken,
-    register,
-    verifyEmail,
-    forgotPassword,
-    validateResetToken,
-    resetPassword,
-    getAll,
-    getById,
-    create,
-    update,
-    delete: _delete
-};
+const dd = require('dump-die');
 
 // authenticate
-const authenticate = async ({ email, password, ipAddress}) => {
-    const account = await db.Account.find({email});
+const authenticate = async ({ email, password, ipAddress }) => {
+    const account = await db.Account.findOne({ email });
 
-    if (!account || !account.isVerified || !bcrypt.compareSync(password, account.passwordHash)) {
+    if (account.isEnabled === false){
+        throw 'User is disabled. You are no longer able to login until Admin enables you again!'
+    }
+
+    if (!account || !bcrypt.compareSync(password, account.passwordHash)) {
         throw 'Email or password is incorrect';
     }
 
     // if the account is verfied
-
+    /* ------------------------- */
     // generate a jwt tokem
     const jwtToken = generateJwtToken(account);
 
@@ -55,8 +44,11 @@ const authenticate = async ({ email, password, ipAddress}) => {
     }
 }
 
-const refreshToken = async (token, ipAddress) => {
+const refreshToken = async ({ token, ipAddress }) => {
     const refreshToken = await getRefreshToken(token);
+
+    // if (!refreshToken.account.isEnabled) return 'User is disabled. You are no longer able to login until Admin enables you again!';
+
     const { account } = refreshToken;
 
     // replace old refresh token with new one and save to db
@@ -80,8 +72,10 @@ const refreshToken = async (token, ipAddress) => {
 }
 
 // revoke token
-const revokeToken = async (token, ipAddress) => {
+const revokeToken = async ({ token, ipAddress }) => {
     const refreshToken = await getRefreshToken(token);
+
+    // if (!refreshToken.account.isEnabled) return 'User is disabled. You are no longer able to login until Admin enables you again!';
 
     // revoke and save
     refreshToken.revoked = Date.now();
@@ -119,10 +113,13 @@ const register = async (params, origin) => {
 const verifyEmail = async (token) => {
     const account = await db.Account.findOne({ verificationToken: token });
 
+    if (!account.isEnabled) throw 'User is disabled. You are no longer able to login until Admin enables you again!';
+
     if (!account) throw 'Verification Failed';
 
     account.verified = Date.now();
     account.verificationToken = undefined;
+    account.isVerified = true;
     await account.save();
 }
 
@@ -134,6 +131,8 @@ next step in resetting the password involves, sending a forgot password email to
 // forgot password
 const forgotPassword = async ({ email }, origin) => {
     const account = db.Account.findOne({ email });
+
+    if (!account.isEnabled) return 'User is disabled. You are no longer able to login until Admin enables you again!';
 
     if (!account) return;
 
@@ -156,6 +155,8 @@ const validateResetToken = async ({ token }) => {
         'resetToken.expires': {$gt: Date.now()}
     });
 
+    if (!account.isEnabled) return 'User is disabled. You are no longer able to login until Admin enables you again!';
+
     if (!account) throw 'Invalid Token'
 }
 
@@ -176,18 +177,19 @@ const resetPassword = async (token, password) => {
 
 
 // get all accounts
-const getAll = async () => {
+const getAll = async (req, res, next) => {
     const accounts = await db.Account.find();
-    return res.status(200).json({
-        success: true,
-        data: accounts.map(x => basicDetails(x))
-    })
+    return accounts.map(x => basicDetails(x))
+
 }
 
 
 // get a single account
 const getById = async (id) => {
     const account = await getAccount(id);
+
+    if (!account.isEnabled) return 'User is disabled. You are no longer able to login until Admin enables you again!';
+
     return res.status(201).json({
         success: true,
         data: basicDetails(account)
@@ -210,20 +212,21 @@ const create = async (params) => {
     // save to db
     await account.save();
 
-    return res.status(201).json({
-        success: true,
-        message: 'account created!',
-        data: basicDetails(account)
-    });
+    return basicDetails(account)
+
 }
 
 const update = async (id, params) => {
     const account = await getAccount(id);
 
-    // validate if email was changed
-    if (params.email && account.email === params.email && await db.Account.findOne({email: params.email})) {
-        throw `Email: ${params.email} is already taken`;
-    }
+    if (!account.isEnabled) return 'User is disabled. You are no longer able to login until Admin enables you again!';
+
+    // // validate if email was changed
+    // if (params.email && account.email === params.email && await db.Account.findOne({email: params.email})) {
+    //     throw `Email: ${params.email} is already taken`;
+    // }
+
+    if (params.email) throw 'You are not allowed to change your email'
 
     // hash the password if entered
     if (params.password) {
@@ -235,17 +238,37 @@ const update = async (id, params) => {
     account.updated = Date.now();
     await account.save();
 
-    return res.status(201).json({
-        success: true,
-        message: "Update Successful!",
-        data: basicDetails(account)
-    });
+    return basicDetails(account);
 }
 
 
 const _delete = async (id) => {
     const account = await getAccount(id);
     await account.remove();
+}
+
+const disableUser = async (id) => {
+    const account = await getAccount(id);
+    if (!account.isEnabled) {
+      return res.json({message: 'User already disabled'})
+    }
+    account.isEnabled = false;
+    return res.status(201).json({
+        success: true,
+        message: 'User Disabled Successfully!'
+    });
+}
+
+const enableUser = async (id) => {
+    const account = await getAccount(id);
+    if (account.isEnabled) {
+        return res.json({message: 'User already Enabled'})
+    }
+    account.isEnabled = true;
+    return res.status(201).json({
+        success: true,
+        message: 'User Enabled Successfully!'
+    });
 }
 
 
@@ -278,7 +301,7 @@ const sendVerificationEmail = async (account, origin) => {
     if (origin) {
         const verifyUrl = `${origin}/account/verify-email?token=${account.verificationToken}`;
         message = `<p>Please click on the link below to verify your email address</p>
-                   <p><a href="${verifyUrl}">${verifyUrl}</a></p> `
+<p><a href="${verifyUrl}">${verifyUrl}</a></p> `
     } else {
         message = `<p>Please use the below token to verify your email address with the the <code>/account/verify-email?token=${account.verificationToken}</code></p>`
     }
@@ -317,15 +340,11 @@ const sendPasswordResetEmail = async (account, origin) => {
     });
 }
 
-
-
 const getRefreshToken = async (token) => {
     const refreshToken = await db.RefreshToken.findOne({ token }).populate('account');
     if (!refreshToken || !refreshToken.isActive)  throw 'Invalid Token'
     return refreshToken;
 }
-
-
 
 const generateJwtToken = (account) => {
     return jwt.sign( {sub: account.id, id: account.id }, config.secret, { expiresIn: '15m'});
@@ -334,7 +353,7 @@ const generateJwtToken = (account) => {
 const generateRefreshToken = (account, ipAddress) => {
     return new db.RefreshToken({
         account: account.id,
-        token: randomTokenString(),
+        token: jwt.sign({id: account.id}, config.secretRefresh, {expiresIn: "7d"}),
         expires: new Date(Date.now() + 7*24*60*60*1000),
         createdByIp: ipAddress,
     })
@@ -350,3 +369,21 @@ const basicDetails = (account) => {
         id, title, firstName, lastName, email, role, created, updated, isVerified
     };
 }
+
+module.exports = {
+    authenticate,
+    refreshToken,
+    revokeToken,
+    register,
+    verifyEmail,
+    forgotPassword,
+    validateResetToken,
+    resetPassword,
+    getAll,
+    getById,
+    create,
+    update,
+    delete: _delete,
+    disableUser,
+    enableUser
+};

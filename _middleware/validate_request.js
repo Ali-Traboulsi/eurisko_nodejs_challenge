@@ -1,4 +1,3 @@
-module.exports = validateRequest;
 
 /*
 Define a function that will valiadate the request against a schema that will be defined in the controller
@@ -19,3 +18,5 @@ const validateRequest = (req, res, schema) => {
         next();
     }
 }
+
+module.exports = validateRequest;

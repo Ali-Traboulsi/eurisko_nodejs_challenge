@@ -4,13 +4,15 @@ Define a Schema for the account collection on MongoDB database. The exported mod
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+// const autoIncrement = require('mongoose-auto-increment');
+
 
 const schema = new Schema({
     email: { type: String, unique: true, required: true },
     passwordHash: { type: String, required: true },
     title: { type: String, required: true },
-    firstName: { type: String, required, true },
-    lastName: { type: String, required, true },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
     acceptTerms: Boolean,
     role: { type: String, required: true },
     verificationToken: String,
@@ -21,15 +23,19 @@ const schema = new Schema({
     },
     passwordReset: Date,
     created: { type: Date, default: Date.now },
-    updated: Date
+    updated: Date,
+    isEnabled: {type: Boolean, default: true}
 });
+
+// autoIncrement.initialize(mongoose.connection);
+// schema.plugin(autoIncrement.plugin, 'Account');
 
 schema.virtual('isVerified').get(() => {
     return !!(this.verified || this.passwordReset)
 })
 
 // configure the settings by setting which properties are allowed to be converted to JSON objects
-schema.json('toJSON', {
+schema.set('toJSON', {
     virtuals: true,
     versionKey: false,
     transform: (doc, ret) => {

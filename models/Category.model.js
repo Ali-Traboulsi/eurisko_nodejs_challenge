@@ -6,4 +6,10 @@ const schema = new Schema({
     catImage: {type: String, required: true},
 });
 
+// schema.methods.toJSON = function () {
+//     const result = this.toObject();
+//     delete result.catImage;
+//     return result
+// };
+
 module.exports = mongoose.model('Category', schema);
