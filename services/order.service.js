@@ -92,7 +92,26 @@ const setStatusDelivered = async (id) => {
     return order;
 }
 
-const getNearbyBranch = async () => {
+const getNearbyBranch = async (AddressId) => {
+
+    const address = await db.Address.findById(AddressId);
+    if (!address) throw 'Address Not Found'
+
+    db.Branch.Branch.createIndexes({ location: "2dsphere" });
+    db.Address.createIndexes({ location: "2dsphere" });
+
+    return db.Branch.Branch.find({
+        location: {
+            $near: {
+                $geometry: {
+                    type: address.label,
+                    coordinates: address.coordinates
+                },
+                $minDistance: 1000,
+                $maxDistance: 5000, // max distance of 5 Km radius
+            }
+        }
+    })
 
 }
 
@@ -106,4 +125,5 @@ module.exports = {
     rejectOrder,
     acceptOrder,
     setStatusDelivered,
+    getNearbyBranch,
 }

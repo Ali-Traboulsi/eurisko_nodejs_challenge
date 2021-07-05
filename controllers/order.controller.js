@@ -79,6 +79,15 @@ const setStatusDelivered = (req, res, next) => {
         .catch(next)
 }
 
+const getNearbyBranch = (req, res, next) => {
+    orderService.getNearbyBranch(req.params.id)
+        .then(order => res.json({
+            message: 'Branch Selection successful!',
+            data: order
+        }))
+        .catch(next)
+}
+
 
 // routes
 router.post('/create',
@@ -108,6 +117,8 @@ router.post('/rejectOrder/:id',
 router.post('/setStatusDelivered/:id',
     // authorize(Role.Admin),
     setStatusDelivered);
-
+router.post('/getNearbyBranch/:id',
+    // authorize(Role.Admin),
+    getNearbyBranch);
 
 module.exports = router;
