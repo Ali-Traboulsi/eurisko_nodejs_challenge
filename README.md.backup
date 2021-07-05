@@ -54,6 +54,50 @@ The app is structured in way that prevents redundant code and enhances reusabili
 --------
 
 - contain files that define fucntions for various purposes including :
-	+ role-based authorization
+	+ send-email function
 	+ mongodb connection
-	+ 
+	+ roles
+	
+#### _middleware: 
+----
+
+- contains middleware functions that can be used in many parts of the application, mainly inside the controller routes to authenticate specific routes and as error handlers for common errors. It also contains a file that defines a request validation function.
+
+
+#### services
+
+These are the type of files that encapsulates application logic 
+
+#### controllers
+
+These are the type of files that defines routes and invokes functions defined in the services for each defined route. 
+
+#### models
+
+Contains the schema model definition using mongoose to define the collection structure inside the database.
+
+#### accounts
+
+contains services, controllers, model specific for the account definition. It encapsulates tokens, refresh token, revoke token, email verification and password reset functionality. Keeping all the account-related files inside one folder helps organizing the app feature-wise (authentication alone and other features alone);
+
+
+# clone this repo
+----
+
+``` 
+git clone https://github.com/Ali-Traboulsi/eurisko_nodejs_challenge.git
+```
+
+# install node modules
+
+```
+yarn install
+```
+
+# start the server
+
+```
+nodemon index.js
+```
+
+
