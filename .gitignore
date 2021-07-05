@@ -1,4 +1,4 @@
 .env
-./catUploads/
-./ItemUploads/
-./node_modules
+/catUploads
+/ItemUploads
+/node_modules
