@@ -6,13 +6,9 @@ const schema = new Schema({
         type: String,
         required: true
     },
-    restaurantBranch: {
+    branch: {
         type: Schema.Types.ObjectId,
         ref: 'RestaurantBranch'
-    },
-    date: {
-        type: Date,
-        required: true,
     },
     item: {
         type: Schema.Types.ObjectId,
@@ -20,23 +16,24 @@ const schema = new Schema({
     },
     status: {
         type: String,
-        required: true
+        default: 'pending'
     },
     customer: {
         type: Schema.Types.ObjectId,
         ref: 'Account',
         required: true,
     },
-    isDelivered:{
-        type: Boolean,
-        required: true
+    address: {
+        type: Schema.Types.ObjectId,
+        ref: 'Address',
+        required: true,
     },
-    shippingAddress: {
-        type: String,
-        coordinates: [Number],
-        required: true
+    isAccepted: {
+        type: Boolean,
+        required: true,
+        default: true,
     }
-})
+});
 
 
 module.exports = mongoose.model('Order', schema);

@@ -16,6 +16,7 @@ module.exports = {
     Category: require('models/Category.model'),
     Item: require('models/Item.model'),
     Order: require('models/Order.model'),
-    Branch: require('models/RestaurantBranch.model'),
+    Branch: require('models/Branch.model'),
+    Address: require('models/Address.model'),
     isValidId
 };

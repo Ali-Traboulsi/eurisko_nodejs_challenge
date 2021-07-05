@@ -31,6 +31,9 @@ app.use(cors());
 app.use('/accounts', require('./accounts/account.controller'));
 app.use('/cat', require('./controllers/category.controller'));
 app.use('/item', require('./controllers/item.controller'));
+app.use('/branch', require('./controllers/branch.controller'));
+app.use('/address', require('./controllers/address.controller'));
+app.use('/order', require('./controllers/order.controller'));
 
 // global error handler
 app.use(errorhandler);
