@@ -41,16 +41,19 @@ and it will attach the user object (id, role) to the req object.
 
 The app is structured in way that prevents redundant code and enhances reusability and code integrity and readability. 
 
-|----_helpers
-|----_midleware
-|----accounts
-|----catUploads
-|----controllers
-|----itemUploads
-|----models
-|----services
+- _helpers
+- _midleware
+- accounts
+- catUploads
+- controllers
+- itemUploads
+- models
+- services
 
 #### _helpers: 
 --------
 
-- contain files that define fucntions for various purposes it's use 
+- contain files that define fucntions for various purposes including :
+	+ role-based authorization
+	+ mongodb connection
+	+ 
