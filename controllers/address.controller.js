@@ -55,7 +55,7 @@ const getAllAddresses = (req, res, next) => {
 
 // routes
 router.post('/create',
-    // authorize(),
+    authorize(),
     create);
 router.put('/update/:id',
     authorize(),

@@ -57,11 +57,23 @@ const getAllCat = (req, res, next) => {
 
 
 // routes
-router.post('/upload', authorize(Role.Admin), catService.upload.single('catImage'), create);
-router.put('/update/:id', authorize(Role.Admin), catService.upload.single('catImage'), update);
-router.delete('/delete/:id', authorize(Role.Admin), _delete);
-router.get('/getCat/:id', authorize(), getCatById);
-router.get('/getAllCat/', authorize(), getAllCat);
+router.post('/upload',
+    authorize(Role.Admin),
+    catService.upload.single('catImage'),
+    create);
+router.put('/update/:id',
+    authorize(Role.Admin),
+    catService.upload.single('catImage'),
+    update);
+router.delete('/delete/:id',
+    authorize(Role.Admin),
+    _delete);
+router.get('/getCat/:id',
+    authorize(),
+    getCatById);
+router.get('/getAllCat/',
+    authorize(),
+    getAllCat);
 
 
 module.exports = router;

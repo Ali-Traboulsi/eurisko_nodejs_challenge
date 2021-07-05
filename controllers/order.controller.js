@@ -91,19 +91,19 @@ const getNearbyBranch = (req, res, next) => {
 
 // routes
 router.post('/create',
-    // authorize(Role.Admin),
+    authorize(Role.Admin),
     create);
 router.put('/update/:id',
-    // authorize(Role.Admin),
+    authorize(Role.Admin),
     update);
 router.delete('/delete/:id',
-    // authorize(Role.Admin),
+    authorize(Role.Admin),
     _delete);
 router.get('/getOrder/:id',
-    // authorize(Role.Admin),
+    authorize(Role.Admin),
     getOrder);
 router.get('/getAllOrders/',
-    // authorize(Role.Admin),
+    authorize(Role.Admin),
     getAllOrders);
 router.post('/acceptOrder/:id',
     authorize(Role.Admin),
@@ -115,10 +115,10 @@ router.post('/rejectOrder/:id',
     },
     rejectOrder);
 router.post('/setStatusDelivered/:id',
-    // authorize(Role.Admin),
+    authorize(Role.Admin),
     setStatusDelivered);
 router.post('/getNearbyBranch/:id',
-    // authorize(Role.Admin),
+    authorize(Role.Admin),
     getNearbyBranch);
 
 module.exports = router;

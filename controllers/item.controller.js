@@ -56,11 +56,21 @@ const getAllItems = (req, res, next) => {
 
 
 // routes
-router.post('/create', authorize(Role.Admin), itemService.upload.single('itemImage'), create);
-router.put('/update/:id', authorize(Role.Admin), itemService.upload.single('itemImage'), update);
-router.delete('/delete/:id', authorize(Role.Admin), _delete);
-router.get('/getItem/:id', getItem);
-router.get('/getAllItems/', getAllItems);
+router.post('/create',
+    authorize(Role.Admin),
+    itemService.upload.single('itemImage'),
+    create);
+router.put('/update/:id',
+    authorize(Role.Admin),
+    itemService.upload.single('itemImage'),
+    update);
+router.delete('/delete/:id',
+    authorize(Role.Admin),
+    _delete);
+router.get('/getItem/:id',
+    getItem);
+router.get('/getAllItems/',
+    getAllItems);
 
 
 module.exports = router;
