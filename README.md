@@ -1,6 +1,6 @@
 # eurisko_nodejs_challenge
 
-### First : Role-based Authentication
+## First : Role-based Authentication
 
 
 #### Authaurize.js
@@ -22,7 +22,7 @@ and it will attach the user object (id, role) to the req object.
 >
 
 
-## Nodejs authentication using mongodb
+### Nodejs authentication using mongodb
 
 - First step was to define helper functions thta include:
 	+ a db file that connects to the mongodb database using mongoose
@@ -36,4 +36,21 @@ and it will attach the user object (id, role) to the req object.
 
 - Third step was to define model schmas for mongodb collections
 
-- 
+
+## Structure
+
+The app is structured in way that prevents redundant code and enhances reusability and code integrity and readability. 
+
+|----_helpers
+|----_midleware
+|----accounts
+|----catUploads
+|----controllers
+|----itemUploads
+|----models
+|----services
+
+#### _helpers: 
+--------
+
+- contain files that define fucntions for various purposes it's use 
